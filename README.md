@@ -1,35 +1,72 @@
-# MuJoCo Robotics Simulation Hackathon
+<div align="center">
 
-Build a robot simulation task, interactive system, or data-collection environment with [Google DeepMind MuJoCo](https://github.com/google-deepmind/mujoco).
+# 🤖 Robothon 2026
 
-This repository is the official Hackathon starter repo. Submit your work by opening a **Pull Request**. Submissions are reviewed based on the PR code, models, run instructions, demo video, and registration UUID.
+### Faraday Future · MuJoCo Robotics Simulation Hackathon
 
-## How to Participate
+**English** · [中文](README.zh-CN.md)
 
-1. Register on the official Hackathon platform and obtain your **registration UUID** (token).
-2. Fork this repository.
-3. Build your project on a feature branch.
-4. Add your submission under `submissions/<your-project-name>/`.
-5. Open a Pull Request to this repository.
-6. Fill in your registration UUID in the required locations (see below).
+Team up with an AI coding agent, build a runnable robot simulation in
+[MuJoCo](https://github.com/google-deepmind/mujoco), and submit it as a Pull Request.
+Every entry is scored by an AI judge panel.
 
-## Registration UUID (Required)
+</div>
 
-Participants must obtain a **registration UUID** from the official Hackathon platform before submitting. This UUID proves that you registered for the event.
+---
 
-### Where to put your UUID
+## 📌 Key Links
 
-You must include the same UUID in **both** places below:
+| | |
+|---|---|
+| 📝 Register / get your contest UUID | _coming soon_ |
+| 📖 Full tutorial | _coming soon_ |
+| 📜 Official rules | _coming soon_ |
+| 💬 Questions & support | _coming soon_ |
 
-#### 1. Submission folder — `registration.json`
+> These links will be finalized before the contest opens.
 
-Create this file inside your submission directory:
+---
 
+## 🚀 What is Robothon 2026?
+
+Robothon 2026 is Faraday Future's open robotics-simulation hackathon. You partner
+with an AI coding tool to design and build a **runnable MuJoCo robot simulation** —
+a task, an interactive system, or a data-collection environment — and submit it as a
+**Pull Request** to this repository. Submissions are reviewed and scored entirely by
+an AI judge panel against one public rubric.
+
+You don't need to be a robotics expert. Bring an idea; let the AI help you build it.
+
+---
+
+## 🗺️ How to Participate
+
+1. **Register and get your contest UUID.** Sign up on the official Robothon platform and copy the **registration UUID** issued to you.
+2. **Pick an AI coding tool** — Cursor, Claude Code, Kimi, Trae, or any agent you like.
+3. **Fork this repository** ([`Faraday-Future-AI/Robothon-starter`](https://github.com/Faraday-Future-AI/Robothon-starter/fork)) and let your AI set up the run environment.
+4. **Propose an idea**, and have the AI build a runnable robot simulation in MuJoCo.
+5. **Open a Pull Request**, putting the **same UUID** in both [`registration.json`](submissions/SUBMISSION_TEMPLATE/registration.json) and the PR description.
+6. **Three AI judges (GPT · Claude · Gemini)** score every entry independently; winners are announced and prizes awarded.
+
+```mermaid
+flowchart TD
+    S1["1 · Register and get your contest UUID"] --> S2["2 · Pick an AI coding tool<br/>Cursor · Claude Code · Kimi · Trae …"]
+    S2 --> S3["3 · Fork this repository<br/>let your AI set up the environment"]
+    S3 --> S4["4 · Propose an idea<br/>AI builds a runnable MuJoCo robot sim"]
+    S4 --> S5["5 · Open a Pull Request<br/>same UUID in registration.json + PR description"]
+    S5 --> S6["6 · 3 AI judges score independently<br/>GPT · Claude · Gemini"]
+    S6 --> S7["🏆 Winners announced · prizes awarded"]
 ```
-submissions/<your-project-name>/registration.json
-```
 
-Example:
+> 💡 **Tip:** When you hit an error, paste the message (or a screenshot) back to your AI tool and ask it to fix it — most issues resolve in a round or two.
+
+---
+
+## 🔑 Registration UUID (Required)
+
+You must include the **same UUID** in **both** places:
+
+**1. In your submission folder — `registration.json`:**
 
 ```json
 {
@@ -39,126 +76,60 @@ Example:
 }
 ```
 
-Replace the example UUID with the one issued by the Hackathon platform. Do not share or reuse another participant's UUID.
-
-#### 2. Pull Request description
-
-When you open your PR, the PR template will ask for your registration UUID. Paste the same UUID there.
-
-If the template is not shown automatically, add this line at the top of your PR description:
+**2. In your Pull Request description** (the PR template will prompt you). If the template isn't shown, add this line at the top:
 
 ```markdown
 Registration UUID: 00000000-0000-0000-0000-000000000000
 ```
 
-Submissions without a valid UUID in both places may be rejected during review.
+> ⚠️ The UUID in `registration.json` and your PR description **must match exactly.**
+> Do not share or reuse another participant's UUID. Submissions without a valid UUID in both places may be rejected.
 
-Use `submissions/SUBMISSION_TEMPLATE/` as a starting point for your folder structure.
-
-## Core Requirements
-
-- Use MuJoCo as the primary physics simulation engine
-- You may use any robot platform: arms, mobile robots, quadrupeds, humanoids, grippers, UGVs, dexterous hands, etc.
-- You may use open-source robot models or custom MJCF models
-- Build a runnable simulation task, interactive system, or data-collection environment
-- Submit via Pull Request
-- Include a demo video or video link in the PR
-
-## Recommended Directions
-
-- **Advanced teleoperation**: keyboard, gamepad, VR, Web UI, motion capture
-- **Long-horizon tasks**: navigation, grasping, carrying, assembly, door opening, tidying, cleaning
-- **Data collection**: auto-generated trajectories, states, actions, images, depth, sensor streams, labels
-- **Dexterous manipulation**: multi-finger grasping, in-hand rotation, tool use, button presses, bottle opening
-- **Real-world scenarios**: K12 education, campus security, home service, warehouse logistics, industrial inspection
-- **Open exploration**: any creative MuJoCo robotics simulation project
-
-## Encouraged Robot Platforms
-
-Open-source robot models are welcome, for example:
-
-- Unitree Go1 / Go2 / G1
-- Boston Dynamics Spot
-- Franka Emika Panda
-- Shadow Hand
-- LEAP Hand
-- Robotiq Gripper
-- Other MuJoCo / MJCF open models
-
-Reference libraries:
-
-- [MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie)
-- [MuJoCo Model Gallery](https://mujoco.readthedocs.io/en/latest/models.html)
-
-## PR Submission Checklist
-
-Each PR should include:
-
-- Project source code
-- MuJoCo scene files / robot models / related assets
-- Run instructions: dependencies, install steps, launch commands, controls
-- Demo video or video link
-- `registration.json` with your platform-issued UUID
-- A short project summary covering:
-  - Project name
-  - Robot platform used
-  - Task goal
-  - Technical approach
-  - Core features
-  - Highlights
-  - Current limitations
-  - Future improvements
-
-## Demo Video Requirements
-
-The video must be produced by running your submitted code and should show:
-
-- Simulation startup
-- Robot platform and task scene
-- Task execution
-- Teleoperation, autonomous control, or data-collection logic
-- Final result or task state
-
-Recommended length: 1–3 minutes.
-
-## Judging Criteria
-
-- **Reproducibility**: does the code run cleanly and is it easy to reproduce?
-- **MuJoCo depth**: MJCF, physics, collision, joints, sensors, actuators
-- **Task design**: clarity, challenge, real-world relevance
-- **Control capability**: teleop, autonomy, policy control, planning, or data collection
-- **Dexterity**: multi-finger coordination and fine manipulation (if applicable)
-- **Engineering quality**: code structure, docs, configuration, asset management
-- **Presentation**: demo video clarity and persuasiveness
-- **Innovation**: novelty in scene, robot, task, or application
-
-## Example Topics
-
-- Campus security patrol with Boston Dynamics Spot
-- Rough-terrain inspection with Unitree Go1 / Go2
-- K12 lab organization with Franka Panda
-- Fine grasping and in-hand rotation with Shadow Hand / LEAP Hand
-- Web / gamepad / VR teleoperation stack
-- Auto-generated grasp trajectory dataset
-- Home-service long-horizon tasks: open door, pick, place, clean desktop
-
-## Goal
-
-Deliver a runnable, demonstrable, reproducible MuJoCo robotics simulation project via Pull Request.
+Use [`submissions/SUBMISSION_TEMPLATE/`](submissions/SUBMISSION_TEMPLATE) as your starting point.
 
 ---
 
-## About This Repository
+## ✅ Eligibility
 
-This is the official Hackathon starter repository. It includes bundled robot assets and example scripts you can fork and extend.
+- Open to legal residents of the fifty (50) United States and the District of Columbia.
+- Must be **18 or older** (or the age of majority in your state, whichever is greater).
+- **Not eligible:** employees, officers, directors, contractors, and agents of Faraday Future and its affiliates, and their immediate family / household members.
+- Limit **one (1) entry per person per day**. Void where prohibited.
 
-### Quick Start
+See the **official rules** for the complete and binding terms.
+
+---
+
+## 🏆 Prizes & Judging
+
+- **AI judge panel.** Every submission is scored entirely by an AI panel — **GPT · Claude · Gemini** — with no human scoring, against one public rubric.
+- **Winner determination.** The winner is determined purely by the highest rubric score.
+- **Prizes.** Prizes will be awarded to the top entries. See the **official rules** for prize details.
+
+**Scoring rubric:**
+
+| Criterion | What we look for |
+|---|---|
+| Reproducibility | Does the code run cleanly and is it easy to reproduce? |
+| MuJoCo depth | Use of MJCF, physics, collisions, joints, sensors, actuators |
+| Task design | Clarity, challenge, and real-world relevance |
+| Control | Teleoperation, autonomy, policy control, planning, or data collection |
+| Dexterity | Multi-finger coordination and fine manipulation (if applicable) |
+| Engineering quality | Code structure, docs, configuration, asset management |
+| Presentation | Demo-video clarity and persuasiveness |
+| Innovation | Novelty in scene, robot, task, or application |
+
+---
+
+## ⚙️ Quick Start
 
 ```bash
+git clone https://github.com/Faraday-Future-AI/Robothon-starter.git
+cd $(basename Faraday-Future-AI/Robothon-starter)
 python3 -m pip install -r requirements.txt
 ```
 
-Run examples:
+Run the example demos:
 
 ```bash
 python examples/run_ff_master_demo.py
@@ -166,15 +137,19 @@ python examples/run_aegis_demo.py
 python examples/run_futurist_demo.py --check-assets
 ```
 
-`run_futurist_demo.py` generates a MuJoCo showcase video when the Futurist mesh files are present. Use `--check-assets` first to verify that every mesh referenced by `assets/Futurist/futurist.urdf` is included.
+`run_futurist_demo.py` generates a MuJoCo showcase video when the Futurist mesh files
+are present. Use `--check-assets` first to verify that every mesh referenced by
+`assets/Futurist/futurist.urdf` is included.
 
-Open MuJoCo Viewer:
+Open the MuJoCo viewer:
 
 ```bash
 python -m mujoco.viewer
 ```
 
-### Bundled Assets
+---
+
+## 📦 What's in This Repo
 
 | Path | Description |
 |------|-------------|
@@ -185,10 +160,73 @@ python -m mujoco.viewer
 | `model_catalog.json` | Reference list of recommended open-source robot models |
 | `submissions/SUBMISSION_TEMPLATE/` | Submission folder template with UUID placeholder |
 
-### Example Scripts
+**Example scripts**
 
 | Script | Asset | Output |
 |--------|-------|--------|
-| `examples/run_ff_master_demo.py` | `assets/Master/scene.xml` | FF Master showcase video and trajectory JSON |
-| `examples/run_aegis_demo.py` | `assets/Aegis/urdf/Aegis_mujoco.urdf` | Aegis patrol video and trajectory JSON |
-| `examples/run_futurist_demo.py` | `assets/Futurist/futurist.urdf` | Futurist showcase video and trajectory JSON |
+| `examples/run_ff_master_demo.py` | `assets/Master/scene.xml` | FF Master showcase video + trajectory JSON |
+| `examples/run_aegis_demo.py` | `assets/Aegis/urdf/Aegis_mujoco.urdf` | Aegis patrol video + trajectory JSON |
+| `examples/run_futurist_demo.py` | `assets/Futurist/futurist.urdf` | Futurist showcase video + trajectory JSON |
+
+---
+
+## 📝 Submission Checklist
+
+Each Pull Request should include:
+
+- [ ] Your project under `submissions/<your-project-name>/`
+- [ ] Project source code
+- [ ] MuJoCo scene files / robot models / related assets
+- [ ] Run instructions: dependencies, install steps, launch commands, controls
+- [ ] A demo video (or video link)
+- [ ] `registration.json` with your platform-issued UUID
+- [ ] The same UUID in your PR description
+- [ ] A short project summary: name, robot platform, task goal, technical approach, core features, highlights, current limitations, future improvements
+
+---
+
+## 🎥 Demo Video Requirements
+
+The video must be produced by running your submitted code, and should show:
+
+- Simulation startup
+- Robot platform and task scene
+- Task execution
+- Teleoperation, autonomous control, or data-collection logic
+- Final result or task state
+
+Recommended length: **1–3 minutes.**
+
+---
+
+## 💡 Recommended Directions
+
+- **Advanced teleoperation** — keyboard, gamepad, VR, Web UI, motion capture
+- **Long-horizon tasks** — navigation, grasping, carrying, assembly, door opening, tidying, cleaning
+- **Data collection** — auto-generated trajectories, states, actions, images, depth, sensor streams, labels
+- **Dexterous manipulation** — multi-finger grasping, in-hand rotation, tool use, button presses, bottle opening
+- **Real-world scenarios** — K12 education, campus security, home service, warehouse logistics, industrial inspection
+- **Open exploration** — any creative MuJoCo robotics simulation project
+
+**Encouraged robot platforms** (open-source models welcome): Unitree Go1 / Go2 / G1, Boston Dynamics Spot, Franka Emika Panda, Shadow Hand, LEAP Hand, Robotiq Gripper, or any MuJoCo / MJCF open model. See [`model_catalog.json`](model_catalog.json), the [MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie), and the [MuJoCo Model Gallery](https://mujoco.readthedocs.io/en/latest/models.html).
+
+---
+
+## 📜 Official Rules & Legal
+
+This page is a friendly summary. The **official rules** are the complete and binding
+terms — please read them before entering.
+
+- **Intellectual property.** You keep ownership of your submission. By entering, you grant Faraday Future a non-exclusive, royalty-free, worldwide license to use, reproduce, display, and distribute your entry for promotional and business purposes.
+- **Eligibility & taxes.** See the official rules for full eligibility, prize, and tax terms.
+- **Sponsor.** Faraday Future Intelligent Electric, Inc. (d/b/a Faraday Future), 1990 E. Grand Ave., El Segundo, CA 90245.
+
+> _Nothing in this repository constitutes investment advice or a recommendation regarding any security._
+
+---
+
+<div align="center">
+
+**Ready?** Register, fork, build, and open your Pull Request. Good luck! 🚀
+
+</div>
