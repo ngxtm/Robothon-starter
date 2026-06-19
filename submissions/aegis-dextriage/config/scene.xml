@@ -1,0 +1,270 @@
+<mujoco model="aegis_dextriage">
+  <compiler angle="radian" autolimits="true" assetdir="../assets"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="RK4" solver="Newton" iterations="60" tolerance="1e-8"/>
+
+  <visual>
+    <global offwidth="1280" offheight="720"/>
+    <quality shadowsize="2048"/>
+    <map znear="0.01" zfar="8"/>
+  </visual>
+
+  <default>
+    <default class="hand_joint">
+      <joint type="hinge" limited="true" range="-0.15 1.15" damping="0.45" armature="0.002"/>
+      <position kp="18" kv="2.2" ctrlrange="-0.15 1.15" forcerange="-8 8"/>
+    </default>
+    <default class="finger_geom">
+      <geom type="capsule" size="0.010" rgba="0.76 0.82 0.90 1" friction="1.1 0.02 0.002" condim="4" density="700"/>
+    </default>
+    <default class="medication">
+      <geom friction="1.3 0.02 0.002" condim="4" density="260" solref="0.004 1" solimp="0.92 0.96 0.001"/>
+    </default>
+  </default>
+
+  <asset>
+    <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1="0.10 0.12 0.14" rgb2="0.14 0.16 0.18"/>
+    <texture name="emergency_label_tex" type="2d" file="labels/emergency_label.png"/>
+    <texture name="antibiotic_label_tex" type="2d" file="labels/antibiotic_label.png"/>
+    <texture name="pain_relief_label_tex" type="2d" file="labels/pain_relief_label.png"/>
+    <texture name="inspect_label_tex" type="2d" file="labels/inspect_label.png"/>
+    <mesh name="label_board_front_mesh" file="meshes/label_board_front.obj"/>
+    <mesh name="label_board_top_mesh" file="meshes/label_board_top.obj"/>
+    <material name="floor_mat" texture="grid" texrepeat="4 4" rgba="0.10 0.12 0.14 1"/>
+    <material name="table_mat" rgba="0.28 0.30 0.32 1"/>
+    <material name="palm_mat" rgba="0.16 0.19 0.24 1"/>
+    <material name="finger_mat" rgba="0.72 0.78 0.86 1"/>
+    <material name="fingertip_mat" rgba="0.08 0.88 0.74 1"/>
+    <material name="emergency_mat" rgba="0.95 0.08 0.06 1"/>
+    <material name="antibiotic_mat" rgba="0.05 0.40 0.95 1"/>
+    <material name="pain_mat" rgba="1.00 0.78 0.08 1"/>
+    <material name="inspect_mat" rgba="0.94 0.94 0.90 1"/>
+    <material name="tray_emergency_mat" rgba="0.65 0.04 0.04 0.72"/>
+    <material name="tray_antibiotic_mat" rgba="0.02 0.18 0.62 0.72"/>
+    <material name="tray_pain_mat" rgba="0.72 0.52 0.02 0.72"/>
+    <material name="tray_inspect_mat" rgba="0.62 0.62 0.58 0.72"/>
+    <material name="emergency_label_mat" texture="emergency_label_tex" rgba="1 1 1 1"/>
+    <material name="antibiotic_label_mat" texture="antibiotic_label_tex" rgba="1 1 1 1"/>
+    <material name="pain_relief_label_mat" texture="pain_relief_label_tex" rgba="1 1 1 1"/>
+    <material name="inspect_label_mat" texture="inspect_label_tex" rgba="1 1 1 1"/>
+  </asset>
+
+  <worldbody>
+    <geom name="floor" type="plane" size="3 3 0.05" material="floor_mat"/>
+    <light name="key_light" pos="0 -1.5 2.4" dir="0 0.45 -1" diffuse="1.25 1.25 1.20" specular="0.25 0.25 0.25"/>
+    <light name="rim_light" pos="-1.1 0.9 1.6" dir="0.5 -0.35 -1" diffuse="0.65 0.70 0.86"/>
+    <light name="tray_fill_light" pos="0.55 -0.55 1.35" dir="-0.35 0.35 -1" diffuse="0.48 0.50 0.52" specular="0.08 0.08 0.08"/>
+
+    <camera name="demo_camera" pos="0.82 -1.05 1.08" xyaxes="0.82 0.57 0 -0.39 0.56 0.73"/>
+    <camera name="topdown_camera" pos="0 0 1.82" xyaxes="1 0 0 0 1 0"/>
+
+    <geom name="zone_emergency_pad" type="box" pos="-0.48 0.31 0.399" size="0.155 0.135 0.003" rgba="0.95 0.05 0.05 0.34" contype="0" conaffinity="0"/>
+    <geom name="zone_antibiotic_pad" type="box" pos="-0.16 0.31 0.399" size="0.155 0.135 0.003" rgba="0.05 0.32 0.95 0.34" contype="0" conaffinity="0"/>
+    <geom name="zone_pain_relief_pad" type="box" pos="0.16 0.31 0.399" size="0.155 0.135 0.003" rgba="0.95 0.68 0.02 0.34" contype="0" conaffinity="0"/>
+    <geom name="zone_inspect_pad" type="box" pos="0.48 0.31 0.399" size="0.155 0.135 0.003" rgba="0.90 0.90 0.82 0.34" contype="0" conaffinity="0"/>
+    <geom name="zone_emergency_text_label" type="mesh" mesh="label_board_top_mesh" pos="-0.48 0.165 0.407" material="emergency_label_mat" contype="0" conaffinity="0"/>
+    <geom name="zone_antibiotic_text_label" type="mesh" mesh="label_board_top_mesh" pos="-0.16 0.165 0.407" material="antibiotic_label_mat" contype="0" conaffinity="0"/>
+    <geom name="zone_pain_relief_text_label" type="mesh" mesh="label_board_top_mesh" pos="0.16 0.165 0.407" material="pain_relief_label_mat" contype="0" conaffinity="0"/>
+    <geom name="zone_inspect_text_label" type="mesh" mesh="label_board_top_mesh" pos="0.48 0.165 0.407" material="inspect_label_mat" contype="0" conaffinity="0"/>
+
+    <body name="triage_table" pos="0 0 0.36">
+      <geom name="table_top" type="box" size="0.72 0.50 0.035" material="table_mat" friction="1.2 0.02 0.002"/>
+      <geom name="table_front_edge" type="box" pos="0 -0.505 0.035" size="0.72 0.012 0.025" rgba="0.08 0.09 0.10 1"/>
+      <geom name="table_back_edge" type="box" pos="0 0.505 0.035" size="0.72 0.012 0.025" rgba="0.08 0.09 0.10 1"/>
+      <geom name="table_left_edge" type="box" pos="-0.725 0 0.035" size="0.012 0.50 0.025" rgba="0.08 0.09 0.10 1"/>
+      <geom name="table_right_edge" type="box" pos="0.725 0 0.035" size="0.012 0.50 0.025" rgba="0.08 0.09 0.10 1"/>
+    </body>
+
+    <body name="tray_emergency" pos="-0.48 0.31 0.425">
+      <geom name="tray_emergency_base" type="box" size="0.13 0.105 0.010" material="tray_emergency_mat"/>
+      <geom name="tray_emergency_back" type="box" pos="0 0.105 0.030" size="0.13 0.010 0.030" material="tray_emergency_mat"/>
+      <geom name="tray_emergency_left" type="box" pos="-0.13 0 0.030" size="0.010 0.105 0.030" material="tray_emergency_mat"/>
+      <geom name="tray_emergency_right" type="box" pos="0.13 0 0.030" size="0.010 0.105 0.030" material="tray_emergency_mat"/>
+      <geom name="tray_emergency_label_backboard" type="box" pos="0 -0.128 0.074" size="0.124 0.006 0.034" rgba="0.12 0.02 0.02 1" contype="0" conaffinity="0"/>
+      <geom name="tray_emergency_text_label" type="mesh" mesh="label_board_front_mesh" pos="0 -0.142 0.074" material="emergency_label_mat" contype="0" conaffinity="0"/>
+      <geom name="tray_emergency_label_plate" type="box" pos="0 -0.075 0.022" size="0.080 0.014 0.004" rgba="1.00 0.92 0.92 1" contype="0" conaffinity="0"/>
+      <geom name="tray_emergency_label_mark_x" type="box" pos="0 -0.075 0.029" size="0.040 0.004 0.003" rgba="0.95 0.05 0.05 1" contype="0" conaffinity="0"/>
+      <geom name="tray_emergency_label_mark_y" type="box" pos="0 -0.075 0.033" size="0.004 0.030 0.003" rgba="0.95 0.05 0.05 1" contype="0" conaffinity="0"/>
+      <site name="tray_emergency_site" pos="0 0 0.06" size="0.012" rgba="1 0.2 0.2 1"/>
+      <site name="tray_emergency_target_site" pos="0 0 0.085" size="0.010" rgba="1 0.65 0.65 1"/>
+    </body>
+
+    <body name="tray_antibiotic" pos="-0.16 0.31 0.425">
+      <geom name="tray_antibiotic_base" type="box" size="0.13 0.105 0.010" material="tray_antibiotic_mat"/>
+      <geom name="tray_antibiotic_back" type="box" pos="0 0.105 0.030" size="0.13 0.010 0.030" material="tray_antibiotic_mat"/>
+      <geom name="tray_antibiotic_left" type="box" pos="-0.13 0 0.030" size="0.010 0.105 0.030" material="tray_antibiotic_mat"/>
+      <geom name="tray_antibiotic_right" type="box" pos="0.13 0 0.030" size="0.010 0.105 0.030" material="tray_antibiotic_mat"/>
+      <geom name="tray_antibiotic_label_backboard" type="box" pos="0 -0.128 0.074" size="0.124 0.006 0.034" rgba="0.02 0.04 0.15 1" contype="0" conaffinity="0"/>
+      <geom name="tray_antibiotic_text_label" type="mesh" mesh="label_board_front_mesh" pos="0 -0.142 0.074" material="antibiotic_label_mat" contype="0" conaffinity="0"/>
+      <geom name="tray_antibiotic_label_plate" type="box" pos="0 -0.075 0.022" size="0.080 0.014 0.004" rgba="0.90 0.94 1.00 1" contype="0" conaffinity="0"/>
+      <geom name="tray_antibiotic_label_mark" type="box" pos="0 -0.075 0.029" size="0.048 0.004 0.003" rgba="0.05 0.32 0.95 1" contype="0" conaffinity="0"/>
+      <site name="tray_antibiotic_site" pos="0 0 0.06" size="0.012" rgba="0.2 0.5 1 1"/>
+      <site name="tray_antibiotic_target_site" pos="0 0 0.085" size="0.010" rgba="0.58 0.75 1 1"/>
+    </body>
+
+    <body name="tray_pain_relief" pos="0.16 0.31 0.425">
+      <geom name="tray_pain_relief_base" type="box" size="0.13 0.105 0.010" material="tray_pain_mat"/>
+      <geom name="tray_pain_relief_back" type="box" pos="0 0.105 0.030" size="0.13 0.010 0.030" material="tray_pain_mat"/>
+      <geom name="tray_pain_relief_left" type="box" pos="-0.13 0 0.030" size="0.010 0.105 0.030" material="tray_pain_mat"/>
+      <geom name="tray_pain_relief_right" type="box" pos="0.13 0 0.030" size="0.010 0.105 0.030" material="tray_pain_mat"/>
+      <geom name="tray_pain_relief_label_backboard" type="box" pos="0 -0.128 0.074" size="0.124 0.006 0.034" rgba="0.16 0.10 0.02 1" contype="0" conaffinity="0"/>
+      <geom name="tray_pain_relief_text_label" type="mesh" mesh="label_board_front_mesh" pos="0 -0.142 0.074" material="pain_relief_label_mat" contype="0" conaffinity="0"/>
+      <geom name="tray_pain_relief_label_plate" type="box" pos="0 -0.075 0.022" size="0.080 0.014 0.004" rgba="1.00 0.96 0.80 1" contype="0" conaffinity="0"/>
+      <geom name="tray_pain_relief_label_mark_left" type="box" pos="-0.020 -0.075 0.029" size="0.016 0.004 0.003" rgba="0.92 0.62 0.02 1" contype="0" conaffinity="0"/>
+      <geom name="tray_pain_relief_label_mark_right" type="box" pos="0.020 -0.075 0.029" size="0.016 0.004 0.003" rgba="0.92 0.62 0.02 1" contype="0" conaffinity="0"/>
+      <site name="tray_pain_relief_site" pos="0 0 0.06" size="0.012" rgba="1 0.82 0.1 1"/>
+      <site name="tray_pain_relief_target_site" pos="0 0 0.085" size="0.010" rgba="1 0.88 0.35 1"/>
+    </body>
+
+    <body name="tray_inspect" pos="0.48 0.31 0.425">
+      <geom name="tray_inspect_base" type="box" size="0.13 0.105 0.010" material="tray_inspect_mat"/>
+      <geom name="tray_inspect_back" type="box" pos="0 0.105 0.030" size="0.13 0.010 0.030" material="tray_inspect_mat"/>
+      <geom name="tray_inspect_left" type="box" pos="-0.13 0 0.030" size="0.010 0.105 0.030" material="tray_inspect_mat"/>
+      <geom name="tray_inspect_right" type="box" pos="0.13 0 0.030" size="0.010 0.105 0.030" material="tray_inspect_mat"/>
+      <geom name="tray_inspect_label_backboard" type="box" pos="0 -0.128 0.074" size="0.124 0.006 0.034" rgba="0.10 0.10 0.09 1" contype="0" conaffinity="0"/>
+      <geom name="tray_inspect_text_label" type="mesh" mesh="label_board_front_mesh" pos="0 -0.142 0.074" material="inspect_label_mat" contype="0" conaffinity="0"/>
+      <geom name="tray_inspect_label_plate" type="box" pos="0 -0.075 0.022" size="0.080 0.014 0.004" rgba="0.98 0.98 0.94 1" contype="0" conaffinity="0"/>
+      <geom name="tray_inspect_label_mark" type="sphere" pos="0 -0.075 0.030" size="0.012" rgba="0.18 0.18 0.16 1" contype="0" conaffinity="0"/>
+      <site name="tray_inspect_site" pos="0 0 0.06" size="0.012" rgba="0.95 0.95 0.88 1"/>
+      <site name="tray_inspect_target_site" pos="0 0 0.085" size="0.010" rgba="1 1 0.94 1"/>
+    </body>
+
+    <body name="red_emergency_box" pos="-0.36 -0.14 0.425">
+      <freejoint name="red_emergency_box_freejoint"/>
+      <geom name="red_emergency_box_geom" class="medication" type="box" size="0.050 0.035 0.025" material="emergency_mat"/>
+      <geom name="red_emergency_cross_x" type="box" pos="0 0 0.029" size="0.030 0.004 0.003" rgba="1 1 1 1" contype="0" conaffinity="0"/>
+      <geom name="red_emergency_cross_y" type="box" pos="0 0 0.033" size="0.004 0.030 0.003" rgba="1 1 1 1" contype="0" conaffinity="0"/>
+      <site name="red_emergency_box_site" pos="0 0 0.035" size="0.010" rgba="1 1 1 1"/>
+      <site name="red_emergency_box_grasp_site" pos="0 0 0.045" size="0.008" rgba="1 1 1 1"/>
+      <site name="red_emergency_box_label_site" pos="0 0 0.060" size="0.006" rgba="1 0.95 0.95 1"/>
+    </body>
+
+    <body name="blue_antibiotic_bottle" pos="-0.08 -0.13 0.465">
+      <freejoint name="blue_antibiotic_bottle_freejoint"/>
+      <geom name="blue_antibiotic_bottle_geom" class="medication" type="cylinder" size="0.028 0.060" material="antibiotic_mat"/>
+      <geom name="blue_antibiotic_cap_geom" type="cylinder" pos="0 0 0.066" size="0.021 0.007" rgba="0.88 0.96 1 1" contype="0" conaffinity="0"/>
+      <geom name="blue_antibiotic_band_geom" type="cylinder" pos="0 0 0.010" size="0.029 0.006" rgba="0.82 0.92 1 1" contype="0" conaffinity="0"/>
+      <site name="blue_antibiotic_bottle_site" pos="0 0 0.070" size="0.010" rgba="1 1 1 1"/>
+      <site name="blue_antibiotic_bottle_grasp_site" pos="0 0 0.030" size="0.008" rgba="0.82 0.92 1 1"/>
+      <site name="blue_antibiotic_bottle_label_site" pos="0 0.030 0.020" size="0.006" rgba="0.82 0.92 1 1"/>
+    </body>
+
+    <body name="yellow_pain_relief_box" pos="0.20 -0.16 0.420">
+      <freejoint name="yellow_pain_relief_box_freejoint"/>
+      <geom name="yellow_pain_relief_box_geom" class="medication" type="box" size="0.045 0.032 0.020" material="pain_mat"/>
+      <geom name="yellow_pain_pill_marker" type="capsule" fromto="-0.018 0 0.024 0.018 0 0.024" size="0.006" rgba="1 1 1 1" contype="0" conaffinity="0"/>
+      <site name="yellow_pain_relief_box_site" pos="0 0 0.030" size="0.010" rgba="1 1 1 1"/>
+      <site name="yellow_pain_relief_box_grasp_site" pos="0 0 0.040" size="0.008" rgba="1 1 1 1"/>
+      <site name="yellow_pain_relief_box_label_site" pos="0 0 0.055" size="0.006" rgba="1 0.96 0.80 1"/>
+    </body>
+
+    <body name="white_unknown_marker" pos="0.42 -0.10 0.425">
+      <freejoint name="white_unknown_marker_freejoint"/>
+      <geom name="white_unknown_marker_geom" class="medication" type="sphere" size="0.032" material="inspect_mat"/>
+      <geom name="white_unknown_inspection_dot" type="sphere" pos="0 0 0.030" size="0.012" rgba="0.04 0.04 0.04 1" contype="0" conaffinity="0"/>
+      <site name="white_unknown_marker_site" pos="0 0 0.040" size="0.010" rgba="0.1 0.1 0.1 1"/>
+      <site name="white_unknown_marker_grasp_site" pos="0 0 0.050" size="0.008" rgba="0.1 0.1 0.1 1"/>
+      <site name="white_unknown_marker_label_site" pos="0 0 0.064" size="0.006" rgba="1 1 0.94 1"/>
+    </body>
+
+    <body name="dexterous_hand" pos="0 -0.38 0.68">
+      <freejoint name="hand_base_freejoint"/>
+      <camera name="wrist_camera" pos="0 -0.10 0.08" xyaxes="1 0 0 0 0.82 0.57"/>
+      <geom name="palm_geom" type="box" size="0.070 0.045 0.022" material="palm_mat" friction="1.0 0.02 0.002"/>
+      <site name="palm_site" pos="0 0 0" size="0.012" rgba="0.08 0.88 0.74 1"/>
+
+      <body name="index_finger_base" pos="-0.045 -0.020 -0.020">
+        <joint name="index_knuckle" class="hand_joint" axis="1 0 0"/>
+        <geom name="index_proximal_geom" class="finger_geom" fromto="0 0 0 0 0 -0.060" material="finger_mat"/>
+        <body name="index_finger_tip" pos="0 0 -0.060">
+          <joint name="index_distal" class="hand_joint" axis="1 0 0" range="-0.10 1.25"/>
+          <geom name="index_distal_geom" class="finger_geom" fromto="0 0 0 0 0 -0.045" material="finger_mat"/>
+          <site name="index_touch_site" pos="0 0 -0.050" type="sphere" size="0.018" rgba="0.08 0.88 0.74 0.80"/>
+          <geom name="index_tip_geom" type="sphere" pos="0 0 -0.050" size="0.017" material="fingertip_mat" friction="1.7 0.02 0.002"/>
+        </body>
+      </body>
+
+      <body name="middle_finger_base" pos="0.000 -0.024 -0.020">
+        <joint name="middle_knuckle" class="hand_joint" axis="1 0 0"/>
+        <geom name="middle_proximal_geom" class="finger_geom" fromto="0 0 0 0 0 -0.065" material="finger_mat"/>
+        <body name="middle_finger_tip" pos="0 0 -0.065">
+          <joint name="middle_distal" class="hand_joint" axis="1 0 0" range="-0.10 1.25"/>
+          <geom name="middle_distal_geom" class="finger_geom" fromto="0 0 0 0 0 -0.050" material="finger_mat"/>
+          <site name="middle_touch_site" pos="0 0 -0.055" type="sphere" size="0.018" rgba="0.08 0.88 0.74 0.80"/>
+          <geom name="middle_tip_geom" type="sphere" pos="0 0 -0.055" size="0.017" material="fingertip_mat" friction="1.7 0.02 0.002"/>
+        </body>
+      </body>
+
+      <body name="ring_finger_base" pos="0.045 -0.020 -0.020">
+        <joint name="ring_knuckle" class="hand_joint" axis="1 0 0"/>
+        <geom name="ring_proximal_geom" class="finger_geom" fromto="0 0 0 0 0 -0.060" material="finger_mat"/>
+        <body name="ring_finger_tip" pos="0 0 -0.060">
+          <joint name="ring_distal" class="hand_joint" axis="1 0 0" range="-0.10 1.25"/>
+          <geom name="ring_distal_geom" class="finger_geom" fromto="0 0 0 0 0 -0.045" material="finger_mat"/>
+          <site name="ring_touch_site" pos="0 0 -0.050" type="sphere" size="0.018" rgba="0.08 0.88 0.74 0.80"/>
+          <geom name="ring_tip_geom" type="sphere" pos="0 0 -0.050" size="0.017" material="fingertip_mat" friction="1.7 0.02 0.002"/>
+        </body>
+      </body>
+
+      <body name="thumb_base" pos="-0.078 0.018 -0.006" euler="0 0 -0.65">
+        <joint name="thumb_knuckle" class="hand_joint" axis="0 1 0" range="-0.20 1.05"/>
+        <geom name="thumb_proximal_geom" class="finger_geom" fromto="0 0 0 0.040 0 -0.030" material="finger_mat"/>
+        <body name="thumb_tip" pos="0.040 0 -0.030">
+          <joint name="thumb_distal" class="hand_joint" axis="0 1 0" range="-0.20 1.20"/>
+          <geom name="thumb_distal_geom" class="finger_geom" fromto="0 0 0 0.040 0 -0.030" material="finger_mat"/>
+          <site name="thumb_touch_site" pos="0.045 0 -0.034" type="sphere" size="0.018" rgba="0.08 0.88 0.74 0.80"/>
+          <geom name="thumb_tip_geom" type="sphere" pos="0.045 0 -0.034" size="0.017" material="fingertip_mat" friction="1.7 0.02 0.002"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <position name="index_knuckle_act" joint="index_knuckle" class="hand_joint"/>
+    <position name="index_distal_act" joint="index_distal" class="hand_joint"/>
+    <position name="middle_knuckle_act" joint="middle_knuckle" class="hand_joint"/>
+    <position name="middle_distal_act" joint="middle_distal" class="hand_joint"/>
+    <position name="ring_knuckle_act" joint="ring_knuckle" class="hand_joint"/>
+    <position name="ring_distal_act" joint="ring_distal" class="hand_joint"/>
+    <position name="thumb_knuckle_act" joint="thumb_knuckle" class="hand_joint"/>
+    <position name="thumb_distal_act" joint="thumb_distal" class="hand_joint"/>
+  </actuator>
+
+  <sensor>
+    <touch name="index_touch" site="index_touch_site"/>
+    <touch name="middle_touch" site="middle_touch_site"/>
+    <touch name="ring_touch" site="ring_touch_site"/>
+    <touch name="thumb_touch" site="thumb_touch_site"/>
+
+    <jointpos name="index_knuckle_pos" joint="index_knuckle"/>
+    <jointpos name="index_distal_pos" joint="index_distal"/>
+    <jointpos name="middle_knuckle_pos" joint="middle_knuckle"/>
+    <jointpos name="middle_distal_pos" joint="middle_distal"/>
+    <jointpos name="ring_knuckle_pos" joint="ring_knuckle"/>
+    <jointpos name="ring_distal_pos" joint="ring_distal"/>
+    <jointpos name="thumb_knuckle_pos" joint="thumb_knuckle"/>
+    <jointpos name="thumb_distal_pos" joint="thumb_distal"/>
+
+    <jointvel name="index_knuckle_vel" joint="index_knuckle"/>
+    <jointvel name="middle_knuckle_vel" joint="middle_knuckle"/>
+    <jointvel name="ring_knuckle_vel" joint="ring_knuckle"/>
+    <jointvel name="thumb_knuckle_vel" joint="thumb_knuckle"/>
+
+    <framepos name="red_emergency_box_pos" objtype="body" objname="red_emergency_box"/>
+    <framepos name="blue_antibiotic_bottle_pos" objtype="body" objname="blue_antibiotic_bottle"/>
+    <framepos name="yellow_pain_relief_box_pos" objtype="body" objname="yellow_pain_relief_box"/>
+    <framepos name="white_unknown_marker_pos" objtype="body" objname="white_unknown_marker"/>
+    <framepos name="red_emergency_box_grasp_pos" objtype="site" objname="red_emergency_box_grasp_site"/>
+    <framepos name="blue_antibiotic_bottle_grasp_pos" objtype="site" objname="blue_antibiotic_bottle_grasp_site"/>
+    <framepos name="yellow_pain_relief_box_grasp_pos" objtype="site" objname="yellow_pain_relief_box_grasp_site"/>
+    <framepos name="white_unknown_marker_grasp_pos" objtype="site" objname="white_unknown_marker_grasp_site"/>
+    <framepos name="hand_palm_pos" objtype="site" objname="palm_site"/>
+    <framepos name="emergency_tray_pos" objtype="site" objname="tray_emergency_site"/>
+    <framepos name="antibiotic_tray_pos" objtype="site" objname="tray_antibiotic_site"/>
+    <framepos name="pain_tray_pos" objtype="site" objname="tray_pain_relief_site"/>
+    <framepos name="inspect_tray_pos" objtype="site" objname="tray_inspect_site"/>
+    <framepos name="tray_emergency_target_pos" objtype="site" objname="tray_emergency_target_site"/>
+    <framepos name="tray_antibiotic_target_pos" objtype="site" objname="tray_antibiotic_target_site"/>
+    <framepos name="tray_pain_relief_target_pos" objtype="site" objname="tray_pain_relief_target_site"/>
+    <framepos name="tray_inspect_target_pos" objtype="site" objname="tray_inspect_target_site"/>
+  </sensor>
+</mujoco>
