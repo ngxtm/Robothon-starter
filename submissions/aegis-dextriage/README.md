@@ -4,6 +4,15 @@ Aegis DexTriage is an autonomous MuJoCo medication triage station. A simplified 
 
 The project is intentionally built for reliable Robothon judging: no model training, no external mesh dependency, and a one-command demo that generates trajectory and metrics artifacts.
 
+## Version 3.0 Clinical Audit + Active Perception + Cinematic Evidence
+
+This is the premium Robothon submission package. Version 3.0 keeps the stable V2.0 sorter and adds judge-facing evidence layers:
+
+- Clinical audit artifacts: `audit_report.json`, `triage_timeline.json`, `confusion_matrix.json`, and `submission_summary.json`.
+- Active perception evidence: per-object cue reports for shape, color, marker, damaged/expired flags, confidence, and policy routing.
+- Cinematic presentation mode: deterministic camera sequencing across demo, top-down, wrist, and final verification views.
+- Benchmark audit mode: seeded multi-trial aggregate evidence with success rate, placement error, verified objects, classification accuracy, and recoveries.
+
 ## Version 2.0 Perception-Guided Multi-Trial Triage
 
 This version upgrades the original runnable MVP into a perception-guided, benchmarkable Robothon submission:
@@ -129,10 +138,28 @@ Run a 20-trial v2 benchmark with deterministic condition perturbations:
 python submissions/aegis-dextriage/scripts/run_demo.py --headless --benchmark --trials 20 --randomized --no-video
 ```
 
+Run a V3 clinical audit package:
+
+```powershell
+python submissions/aegis-dextriage/scripts/run_demo.py --headless --steps 2400 --audit --no-video
+```
+
+Run a V3 benchmark audit package:
+
+```powershell
+python submissions/aegis-dextriage/scripts/run_demo.py --headless --benchmark --trials 20 --randomized --audit --no-video
+```
+
 Render the v2 HUD presentation video:
 
 ```powershell
 python submissions/aegis-dextriage/scripts/run_demo.py --hud --steps 2400 --duration 12 --fps 24 --width 960 --height 720
+```
+
+Render the V3 cinematic HUD video:
+
+```powershell
+python submissions/aegis-dextriage/scripts/run_demo.py --cinematic --hud --steps 2400 --duration 12 --fps 24 --width 960 --height 720
 ```
 
 Render alternate camera views:
@@ -159,6 +186,11 @@ Outputs are written to:
 submissions/aegis-dextriage/outputs/trajectory.json
 submissions/aegis-dextriage/outputs/metrics.json
 submissions/aegis-dextriage/outputs/demo.mp4
+submissions/aegis-dextriage/outputs/audit_report.json
+submissions/aegis-dextriage/outputs/perception_report.json
+submissions/aegis-dextriage/outputs/triage_timeline.json
+submissions/aegis-dextriage/outputs/confusion_matrix.json
+submissions/aegis-dextriage/outputs/submission_summary.json
 ```
 
 If MP4 encoding is unavailable, the script writes a GIF fallback.
@@ -186,7 +218,7 @@ A successful run prints judge-friendly trace lines and final JSON:
 
 `outputs/metrics.json` records:
 
-- `version`: current submission schema, `2.0`.
+- `version`: current submission schema, `3.0`.
 - `pipeline`: perception, triage policy, grasp, placement, and verification stages.
 - `success`: full-task result.
 - `sorted_count` and `object_count`.
@@ -198,17 +230,25 @@ A successful run prints judge-friendly trace lines and final JSON:
 
 For benchmark mode, the metrics file stores a `trials` array plus aggregate success rate, mean placement error, sorted object count, and total recoveries.
 
+V3 audit artifacts add:
+
+- `audit_report.json`: object priority, risk score, route reason, placement verification, and contact evidence.
+- `perception_report.json`: detected cues, confidence, condition flags, policy target, and verification state.
+- `triage_timeline.json`: ordered scan, grasp, place, and verification evidence.
+- `confusion_matrix.json`: expected category versus perceived category.
+- `submission_summary.json`: top-level artifact index for Robothon judging.
+
 ## Rubric Mapping
 
 | Rubric area | Evidence in this submission |
 |---|---|
-| Runnability | Deterministic one-command demo plus 20-trial benchmark mode with seeded randomized conditions. |
+| Runnability | Deterministic one-command demo plus 20-trial benchmark audit mode with seeded randomized conditions. |
 | Depth of MuJoCo Use | MJCF joints, actuators, touch sensors, frame sensors, cameras, collision geoms, target sites, and grasp sites. |
 | Task Design | Emergency medication triage is clear, meaningful, and visually easy to inspect. |
-| Control | Perception-guided triage policy, phase-based hand motion, contact evidence, placement verification, and recovery-aware events. |
+| Control | Perception-guided triage policy, phase-based hand motion, contact evidence, placement verification, risk scoring, and recovery-aware events. |
 | Dexterous Manipulation | Multi-finger hand coordinates different grasps for box, cylinder, and sphere objects. |
-| Engineering Quality | Focused modules for perception, triage policy, benchmark aggregation, HUD rendering, control, planning, and reproducible artifacts. |
-| Presentation | HUD video, textured labels, zone pads, trace logs, and metrics artifacts show the full perception-to-action loop. |
+| Engineering Quality | Focused modules for perception, triage policy, benchmark aggregation, audit reports, perception reports, cinematic scheduling, HUD rendering, control, and planning. |
+| Presentation | Cinematic HUD video, textured labels, zone pads, trace logs, audit artifacts, and metrics show the full perception-to-action loop. |
 | Innovation | Applies dexterous manipulation to field medication triage instead of generic pick-and-place. |
 
 ## Current Limitations

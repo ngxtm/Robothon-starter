@@ -21,11 +21,13 @@ class BenchmarkTests(unittest.TestCase):
                         "placement_error_m": 0.01,
                         "perceived_category": "emergency",
                         "target_label": "Emergency",
+                        "verified": True,
                     },
                     "blue": {
                         "placement_error_m": 0.02,
                         "perceived_category": "antibiotic",
                         "target_label": "Antibiotic",
+                        "verified": True,
                     },
                 },
                 "recovery_count": 1,
@@ -40,6 +42,7 @@ class BenchmarkTests(unittest.TestCase):
                         "placement_error_m": 0.03,
                         "perceived_category": "emergency",
                         "target_label": "Emergency",
+                        "verified": True,
                     },
                 },
                 "recovery_count": 0,
@@ -53,6 +56,8 @@ class BenchmarkTests(unittest.TestCase):
         self.assertEqual(summary["success_rate"], 0.5)
         self.assertEqual(summary["mean_placement_error_m"], 0.02)
         self.assertEqual(summary["total_recoveries"], 1)
+        self.assertEqual(summary["verified_objects"], 3)
+        self.assertEqual(summary["classification_accuracy"], 1.0)
 
 
 if __name__ == "__main__":
