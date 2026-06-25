@@ -268,3 +268,4 @@
     <framepos name="tray_inspect_target_pos" objtype="site" objname="tray_inspect_target_site"/>
   </sensor>
 </mujoco>
+  <include file="../../../assets/Futurist/futurist.urdf"/>

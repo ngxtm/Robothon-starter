@@ -229,10 +229,21 @@ def run_demo(
     trial_index: int = 0,
     trial_seed: int = 7,
 ) -> dict[str, Any]:
+    import time
+    start_time = time.time()
     model = mujoco.MjModel.from_xml_path(str(model_path))
     data = mujoco.MjData(model)
     planner = DexTriagePlanner()
     controller = DexTriageController(model, data, planner)
+    
+    from sensor_integration import SensorIntegration
+    sensor_sys = SensorIntegration(model, data)
+    try:
+        sensor_sys.initialize_sensors()
+    except Exception as e:
+        print(e)
+        return {"success": False, "error": str(e), "sorted_count": 0, "object_count": 0}
+
     controller.reset_scene(
         trial_index=trial_index,
         seed=trial_seed,
@@ -253,7 +264,18 @@ def run_demo(
     sample_stride = max(1, steps // 80)
 
     for step in range(steps):
+        if time.time() - start_time > 300.0:
+            print("Execution exceeded 300 seconds")
+            break
+            
         state = controller.step(step, steps)
+        
+        forces = sensor_sys.get_contact_forces()
+        if forces:
+             if "forces" not in state:
+                 state["forces"] = []
+             state["forces"].extend(forces)
+
         if step % sample_stride == 0 or step == steps - 1:
             samples.append(
                 {
